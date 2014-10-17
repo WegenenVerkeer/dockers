@@ -1,4 +1,11 @@
-FROM wegenenverkeer/base
+FROM phusion/baseimage:0.9.10
+
+ENV HOME /root
+
+RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
+RUN /usr/sbin/enable_insecure_key
+
+CMD ["/sbin/my_init"]
 
 RUN apt-get update
 RUN apt-get -y -q install postgresql-9.3 postgresql-client-9.3 postgresql-9.3-postgis-2.1 postgis
@@ -6,6 +13,7 @@ RUN apt-get -y -q install postgresql-9.3 postgresql-client-9.3 postgresql-9.3-po
 RUN mkdir -p /etc/service/postgresql
 ADD postgresql.sh /etc/service/postgresql/run
 RUN chmod a+x /etc/service/postgresql/run
+
 
 # Run the rest of the commands as the ``postgres`` user created by the ``postgres-9.3`` package when it was ``apt-get installed``
 USER postgres
@@ -21,9 +29,7 @@ RUN    /etc/init.d/postgresql start &&\
     psql -d template_postgis2.1 -f /usr/share/postgresql/9.3/extension/postgis--2.1.2.sql &&\
     psql -d template_postgis2.1 -c "GRANT ALL ON geometry_columns TO PUBLIC;" &&\ 
     psql -d template_postgis2.1 -c "GRANT ALL ON geography_columns TO PUBLIC;" &&\
-    psql -d template_postgis2.1 -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;" &&\
-    createdb -O docker docker &&\
-    /etc/init.d/postgresql stop
+    psql -d template_postgis2.1 -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"
 
 # Adjust PostgreSQL configuration so that remote connections to the
 # database are possible. 
@@ -31,10 +37,6 @@ RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.3/main/pg_hba.co
 
 # And add ``listen_addresses`` to ``/etc/postgresql/9.3/main/postgresql.conf``
 RUN echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
-
-RUN echo "external_pid_file = '/tmp/9.3-main.pid'" >> /etc/postgresql/9.3/main/postgresql.conf
-
-RUN echo "unix_socket_directories = '/tmp'" >> /etc/postgresql/9.3/main/postgresql.conf
 
 # Expose the PostgreSQL port
 EXPOSE 5432
@@ -45,3 +47,4 @@ VOLUME	["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 USER root
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
