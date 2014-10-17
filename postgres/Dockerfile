@@ -29,7 +29,8 @@ RUN    /etc/init.d/postgresql start &&\
     psql -d template_postgis2.1 -f /usr/share/postgresql/9.3/extension/postgis--2.1.2.sql &&\
     psql -d template_postgis2.1 -c "GRANT ALL ON geometry_columns TO PUBLIC;" &&\ 
     psql -d template_postgis2.1 -c "GRANT ALL ON geography_columns TO PUBLIC;" &&\
-    psql -d template_postgis2.1 -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"
+    psql -d template_postgis2.1 -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;" &&\
+    /etc/init.d/postgresql stop
 
 # Adjust PostgreSQL configuration so that remote connections to the
 # database are possible. 
