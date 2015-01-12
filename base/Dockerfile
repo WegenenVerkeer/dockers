@@ -8,6 +8,5 @@ RUN /usr/sbin/enable_insecure_key
 
 CMD ["/sbin/my_init"]
 
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y wget curl zip unzip python2.7
+RUN apt-get update && apt-get upgrade -y && apt-get install -y wget curl zip unzip python2.7
 
