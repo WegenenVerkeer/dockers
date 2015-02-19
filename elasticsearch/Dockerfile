@@ -3,7 +3,7 @@ FROM wegenenverkeer/java8
 RUN apt-get update
 RUN apt-get install -y wget curl
 
-RUN cd /tmp && wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.3.tar.gz && tar xvfz elasticsearch* && rm *tar.gz && mv elasticsearch* /opt
+RUN cd /tmp && wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.20.2.tar.gz && tar xvfz elasticsearch* && rm *tar.gz && mv elasticsearch* /opt
 RUN ln -sf /opt/elasticsearch* /opt/elasticsearch
 
 EXPOSE 9200
