@@ -1,2 +1,2 @@
 #!/bin/sh
-mongod 2>&1
+/usr/local/mongo/bin/mongod 2>&1
