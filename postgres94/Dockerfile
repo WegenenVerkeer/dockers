@@ -13,11 +13,10 @@ RUN apt-get update && \
     curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
     sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main" >> /etc/apt/sources.list.d/pgdg.list' && \
     apt-get update && \
-    apt-get -y -q install postgresql-9.4 postgresql-client-9.4 postgresql-9.4-postgis-2.1 postgis
-    
-RUN mkdir -p /etc/service/postgresql
-ADD postgresql.sh /etc/service/postgresql/run
-RUN chmod a+x /etc/service/postgresql/run
+    apt-get -y -q install postgresql-9.4 postgresql-client-9.4 postgresql-9.4-postgis-2.1 postgis &&\
+    mkdir -p /etc/service/postgresql &&\
+    postgresql.sh /etc/service/postgresql/run &&\
+    chmod a+x /etc/service/postgresql/run
 
 
 # Run the rest of the commands as the ``postgres`` user created by the ``postgres-9.4`` package when it was ``apt-get installed``
